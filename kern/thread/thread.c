@@ -849,8 +849,8 @@ thread_timeryield(void)
  */
 
 // define any one of the following for usage
-#define SCHED_MLFQ
-// #define SCHED_FIFO
+// #define SCHED_MLFQ
+#define SCHED_FIFO
 
 #ifdef SCHED_FIFO
     #ifdef SCHED_MLFQ
@@ -879,7 +879,7 @@ schedule(void)
     // reset every 100 hardclocks for MLFQ
     #ifdef SCHED_MLFQ
     if ((curcpu->c_hardclocks % 100) == 0) {
-        kprintf("\n**Updating priority to prevent starvation.**\n");
+        // kprintf("\n**Updating priority to prevent starvation.**\n");
         struct thread* t;
         THREADLIST_FORALL(t, curcpu->c_runqueue) {
             // kprintf("_hs_priority = %ld\n to 0", t->_hs_priority);
@@ -888,12 +888,12 @@ schedule(void)
     }
     #endif // SCHED_MLFQ
 
-    kprintf("\n**Fancy sched will ");
+    // kprintf("\n**Fancy sched will ");
     if (threadlist_isempty(&(curcpu->c_runqueue))) {
-        kprintf("not run: Thread list empty.**\n");
+        // kprintf("not run: Thread list empty.**\n");
         return;
     }
-    kprintf("run; strategy: %s.**\n", SCHED_NAME);
+    // kprintf("run; strategy: %s.**\n", SCHED_NAME);
 
     struct thread* mt = NULL;
     #ifdef SCHED_MLFQ
