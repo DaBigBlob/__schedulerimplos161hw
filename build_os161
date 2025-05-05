@@ -23,9 +23,7 @@ yellow=`tput setaf 3`
 reset=`tput sgr0`
 
 # Assignment number to concantenate to ASST
-assignNo=$1
-confPrefix="ASST"
-confName="${confPrefix}${assignNo}"
+confName="DUMBVM"
 
 
 # Full path of directory of the assignment repository
