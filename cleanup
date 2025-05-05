@@ -3,6 +3,6 @@
 cd ~/os161/src || exit
 bmake clean
 
-cd kern/compile/ASST3  || exit
+cd kern/compile/DUMBVM  || exit
 bmake clean
 
