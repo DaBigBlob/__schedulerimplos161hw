@@ -1,0 +1,19 @@
+#!/bin/sh
+
+cd ~/os161/src
+./configure
+# building the userland
+# only builds the clibs and testbin/test
+# everything else disabled
+bmake includes
+bmake depend -j33 #pretty fast on M* Macs
+bmake -j33
+bmake install
+
+# building the kernel
+cd kern/conf
+./config DUMBVM
+cd ../compile/DUMBVM
+bmake depend -j33 #pretty fast on M* Macs
+bmake -j33
+bmake install
