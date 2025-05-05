@@ -888,12 +888,12 @@ schedule(void)
     }
     #endif // SCHED_MLFQ
 
-    // kprintf("\n**Fancy sched will ");
+    kprintf("\n**Fancy sched will ");
     if (threadlist_isempty(&(curcpu->c_runqueue))) {
-        // kprintf("not run: Thread list empty.**\n");
+        kprintf("not run: Thread list empty.**\n");
         return;
     }
-    // kprintf("run; strategy: %s.**\n", SCHED_NAME);
+    kprintf("run; strategy: %s.**\n", SCHED_NAME);
 
     struct thread* mt = NULL;
     #ifdef SCHED_MLFQ

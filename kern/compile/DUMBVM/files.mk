@@ -75,7 +75,6 @@ SRCS+=$(KTOP)/test/threadtest.c
 SRCS+=$(KTOP)/test/tt3.c
 SRCS+=$(KTOP)/test/waittest.c
 SRCS+=$(KTOP)/thread/clock.c
-SRCS+=$(KTOP)/thread/hangman.c
 SRCS+=$(KTOP)/thread/spinlock.c
 SRCS+=$(KTOP)/thread/spl.c
 SRCS+=$(KTOP)/thread/synch.c
