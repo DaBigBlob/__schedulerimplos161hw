@@ -1,0 +1,11 @@
+#!/bin/sh
+
+cd ~/os161/src || exit
+bmake -j33
+bmake install
+
+# building the kernel
+cd kern/conf || exit
+cd ../compile/DUMBVM || exit
+bmake -j33
+bmake install

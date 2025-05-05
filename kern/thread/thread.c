@@ -853,20 +853,20 @@ schedule(void)
 {
     // reset every 100 hardclocks
     if ((curcpu->c_hardclocks % 100) == 0) {
-        kprintf("Updating priority to prevent starvation.\n");
+        kprintf("\n**Updating priority to prevent starvation.**\n\n");
         struct thread* t;
         THREADLIST_FORALL(t, curcpu->c_runqueue) {
-            kprintf("_hs_priority = %ld\n to 0", t->_hs_priority);
+            // kprintf("_hs_priority = %ld\n to 0", t->_hs_priority);
             t->_hs_priority = 0;
         }
     }
 
-    kprintf("Fancy sched will ");
+    kprintf("\n**Fancy sched will ");
     if (threadlist_isempty(&(curcpu->c_runqueue))) {
-        kprintf("not run: Thread list empty.\n");
+        kprintf("not run: Thread list empty.**\n\n");
         return;
     }
-    kprintf("run.\n");
+    kprintf("run.**\n\n");
 
     struct thread* mt = NULL;
     signed long min = __LONG_MAX__;
