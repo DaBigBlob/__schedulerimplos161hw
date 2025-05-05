@@ -847,34 +847,69 @@ thread_timeryield(void)
  * This is called periodically from hardclock(). It should reshuffle
  * the current CPU's run queue by job priority.
  */
+
+// define any one of the following for usage
+#define SCHED_MLFQ
+// #define SCHED_FIFO
+
+#ifdef SCHED_FIFO
+    #ifdef SCHED_MLFQ
+        #error "define either SCHED_MLFQ or SCHED_FIFO"
+    #endif
+#endif
+
+#ifdef SCHED_MLFQ
+    #define FANCY_SCHED
+    #define SCHED_NAME "MLFQ"
+#endif
+
+#ifdef SCHED_FIFO
+    #define FANCY_SCHED
+    #define SCHED_NAME "FIFO"
+#endif
+
+
 #include <threadlist.h>
+#define LONG_MAX  __LONG_MAX__
+#define LONG_MIN  (-__LONG_MAX__ -1L)
 void
 schedule(void)
 {
-    // reset every 100 hardclocks
+#ifdef FANCY_SCHED
+    // reset every 100 hardclocks for MLFQ
+    #ifdef SCHED_MLFQ
     if ((curcpu->c_hardclocks % 100) == 0) {
-        kprintf("\n**Updating priority to prevent starvation.**\n\n");
+        kprintf("\n**Updating priority to prevent starvation.**\n");
         struct thread* t;
         THREADLIST_FORALL(t, curcpu->c_runqueue) {
             // kprintf("_hs_priority = %ld\n to 0", t->_hs_priority);
             t->_hs_priority = 0;
         }
     }
+    #endif // SCHED_MLFQ
 
     kprintf("\n**Fancy sched will ");
     if (threadlist_isempty(&(curcpu->c_runqueue))) {
-        kprintf("not run: Thread list empty.**\n\n");
+        kprintf("not run: Thread list empty.**\n");
         return;
     }
-    kprintf("run.**\n\n");
+    kprintf("run; strategy: %s.**\n", SCHED_NAME);
 
     struct thread* mt = NULL;
-    signed long min = __LONG_MAX__;
+    #ifdef SCHED_MLFQ
+        signed long min = LONG_MAX;
+    #else // SCHED_FIFO
+        signed long min = LONG_MIN;
+    #endif // SCHED_MLFQ
 
     struct thread* t;
     THREADLIST_FORALL(t, curcpu->c_runqueue) {
         // kprintf("Checking for thread with _hs_priority = %ld\n", t->_hs_priority);
-        if (t->_hs_priority < min) {
+        #ifdef SCHED_MLFQ
+            if (t->_hs_priority < min) {
+        #else // SCHED_FIFO
+            if (t->_hs_priority > min) {
+        #endif // SCHED_MLFQ
             mt = t;
             min = t->_hs_priority;
         }
@@ -883,6 +918,7 @@ schedule(void)
 
     threadlist_remove(&(curcpu->c_runqueue), mt);
     threadlist_addhead(&(curcpu->c_runqueue), mt);
+#endif // FANCY_SCHED
 }
 
 /*
