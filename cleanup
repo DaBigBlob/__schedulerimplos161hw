@@ -1,0 +1,8 @@
+#!/bin/sh
+
+cd ~/os161/src || exit
+bmake clean
+
+cd kern/compile/ASST3  || exit
+bmake clean
+
