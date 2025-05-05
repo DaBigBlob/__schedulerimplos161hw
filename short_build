@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd ~/os161/src
+cd ~/os161/src || exit
 ./configure
 # building the userland
 # only builds the clibs and testbin/test
@@ -11,9 +11,9 @@ bmake -j33
 bmake install
 
 # building the kernel
-cd kern/conf
+cd kern/conf || exit
 ./config DUMBVM
-cd ../compile/DUMBVM
+cd ../compile/DUMBVM || exit
 bmake depend -j33 #pretty fast on M* Macs
 bmake -j33
 bmake install
